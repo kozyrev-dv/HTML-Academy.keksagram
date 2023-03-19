@@ -1,10 +1,8 @@
-function randInt(min, max) {
-  if (max < min) {
-    const error = new Error('Max value can not be less than min value.');
-    error.code = 'ERR_INVALID_ARG_VALUE';
-    throw error;
-  }
-  return Math.floor(Math.random() * (max - min) + min);
+function randInt(a, b) {
+  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
+  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+
+  return Math.floor(Math.random() * (upper - lower + 1) + lower);
 }
 
 const checkLength = (message, maxLength) => String(message).length <= maxLength;
