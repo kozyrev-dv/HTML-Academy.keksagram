@@ -18,7 +18,8 @@ const generatePhoto = (id, description) => ({
 const generatePhotos = (amount, descriptions) => Array.from({length: amount}, (v, index) => generatePhoto(index, descriptions[index]));
 
 const PHOTOS_AMOUNT = 25;
+const DESCRIPTIONS = Array.from({length: PHOTOS_AMOUNT}, (v, index) => `the ${index + 1} photo`);
 
-generatePhotos(PHOTOS_AMOUNT, Array.from({length: PHOTOS_AMOUNT}, () => ''));
+generatePhotos(PHOTOS_AMOUNT, DESCRIPTIONS);
 
 checkLength('Hello World!', 12);
