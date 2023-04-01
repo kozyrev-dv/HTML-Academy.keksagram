@@ -16,5 +16,7 @@ const generatePhotoElements = (amount, urls, descriptions) => {
   picturesContainer.appendChild(picturesFragment);
 };
 
+//Задание 7 часть 2
+
 export {generatePhotoElements};
 
