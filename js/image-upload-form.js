@@ -10,13 +10,22 @@ const imageUploadForm = document.querySelector('#upload-select-image');
 const fileSelectInputElement = document.querySelector('#upload-file');
 const imageUploadContainer = document.querySelector('.img-upload__overlay');
 const uploadCancelButton = document.querySelector('#upload-cancel');
-//const imageUploadSubmitButton = document.querySelector('#upload-cancel');
+const imageUploadSubmitButton = document.querySelector('#upload-submit');
 const imageUploadPreview = document.querySelector('.img-upload__preview');
+const descriptionTextAreaElement = document.querySelector('.text__description');
 
 const scaleControlValueElement = document.querySelector('.scale__control--value');
 
 let imageScaleValue = IMAGE_SIZE_INIT;
 let isPreviewContainerHidden = true;
+
+//----- setting Prestine validation
+
+const pristine = new Pristine(imageUploadForm, {
+  classTo: 'image-description__field-label',
+  errorTextParent: 'image-description__field-label'
+});
+
 
 const setScaleControlValue = (value) => {
   imageScaleValue = imageScaleValue = Math.min(IMAGE_SIZE_MAX, Math.max(IMAGE_SIZE_MIN, value));
@@ -62,12 +71,10 @@ document.querySelector('.scale__control--bigger').addEventListener('click', () =
   setScaleControlValue(imageScaleValue + IMAGE_RESIZE_STEP);
 });
 
-//----- setting Prestine validation
+imageUploadSubmitButton.addEventListener('submit', hideImagePreviewContainer);
 
-const pristine = new Pristine(imageUploadForm);
-
-// imageUploadForm.addEventListener('submit', () => {
-//   hideImagePreviewContainer();
-// });
+descriptionTextAreaElement.addEventListener('input', () => {
+  imageUploadSubmitButton.disabled = !pristine.validate();
+});
 
 setScaleControlValue(IMAGE_SIZE_INIT);

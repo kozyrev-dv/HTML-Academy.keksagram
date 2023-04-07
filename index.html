@@ -120,8 +120,13 @@
                     <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег">
                   </div>
                   <div class="img-upload__field-wrapper">
-                    <textarea class="text__description" name="description" placeholder="Ваш комментарий..."
-                    minlength="20" maxlength="140" required></textarea>
+                    <label class="image-description__field-label">
+                      <textarea class="text__description" name="description" placeholder="Ваш комментарий..."
+                      minlength="20" maxlength="140" required
+                      data-pristine-required-message="Обязательное поле"
+                      data-pristine-minlength-message="Минимальная длина 20 символов"
+                      data-pristine-maxlength-message="Максимальная длина 140 символов"></textarea>
+                    </label>
                   </div>
                 </fieldset>
 
@@ -234,7 +239,7 @@
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
 
-  <script src="dist/pristine.js"  type="text/javascript"></script>
+  <script src="pristine/pristine.min.js"  type="text/javascript"></script>
   <script src="js/image-upload-form.js" type="module"></script>
   <script src="js/data.js" type="module"></script>
   <script src="js/utils.js" type="module"></script>
