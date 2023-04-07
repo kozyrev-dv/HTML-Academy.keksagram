@@ -6,10 +6,11 @@ const IMAGE_SIZE_MIN = 25;
 const IMAGE_SIZE_INIT = 100;
 const IMAGE_RESIZE_STEP = 25;
 
+const imageUploadForm = document.querySelector('#upload-select-image');
 const fileSelectInputElement = document.querySelector('#upload-file');
 const imageUploadContainer = document.querySelector('.img-upload__overlay');
 const uploadCancelButton = document.querySelector('#upload-cancel');
-const imageUploadSubmitButton = document.querySelector('#upload-cancel');
+//const imageUploadSubmitButton = document.querySelector('#upload-cancel');
 const imageUploadPreview = document.querySelector('.img-upload__preview');
 
 const scaleControlValueElement = document.querySelector('.scale__control--value');
@@ -43,16 +44,14 @@ const hideImagePreviewContainer = () => {
   }
 };
 
+//----- setting EventListeners
+
 fileSelectInputElement.addEventListener('input', showImagePreviewContainer);
 uploadCancelButton.addEventListener('click', hideImagePreviewContainer);
 document.addEventListener('keydown', (evt) => {
   if (!isPreviewContainerHidden && (evt.key === 'Esc' || evt.key === 'Escape')) {
     hideImagePreviewContainer();
   }
-});
-
-imageUploadSubmitButton.addEventListener('submit', () => {
-  hideImagePreviewContainer();
 });
 
 document.querySelector('.scale__control--smaller').addEventListener('click', () => {
@@ -62,5 +61,13 @@ document.querySelector('.scale__control--smaller').addEventListener('click', () 
 document.querySelector('.scale__control--bigger').addEventListener('click', () => {
   setScaleControlValue(imageScaleValue + IMAGE_RESIZE_STEP);
 });
+
+//----- setting Prestine validation
+
+const pristine = new Pristine(imageUploadForm);
+
+// imageUploadForm.addEventListener('submit', () => {
+//   hideImagePreviewContainer();
+// });
 
 setScaleControlValue(IMAGE_SIZE_INIT);
