@@ -11,7 +11,7 @@ const fileSelectInputElement = document.querySelector('#upload-file');
 const imageUploadContainer = document.querySelector('.img-upload__overlay');
 const uploadCancelButton = document.querySelector('#upload-cancel');
 const imageUploadSubmitButton = document.querySelector('#upload-submit');
-const imageUploadPreview = document.querySelector('.img-upload__preview');
+const imageUploadPreviewElement = document.querySelector('.img-upload__preview');
 const descriptionTextAreaElement = document.querySelector('.text__description');
 
 const scaleControlValueElement = document.querySelector('.scale__control--value');
@@ -30,7 +30,7 @@ const pristine = new Pristine(imageUploadForm, {
 const setScaleControlValue = (value) => {
   imageScaleValue = imageScaleValue = Math.min(IMAGE_SIZE_MAX, Math.max(IMAGE_SIZE_MIN, value));
   scaleControlValueElement.value = `${imageScaleValue}%`;
-  imageUploadPreview.style.transform = `scale(${imageScaleValue / 100.0})`;
+  imageUploadPreviewElement.style.transform = `scale(${imageScaleValue / 100.0})`;
 };
 
 const showImagePreviewContainer = () => {
@@ -53,7 +53,6 @@ const hideImagePreviewContainer = () => {
   }
 };
 
-//----- setting EventListeners
 
 fileSelectInputElement.addEventListener('input', showImagePreviewContainer);
 uploadCancelButton.addEventListener('click', hideImagePreviewContainer);
@@ -77,4 +76,6 @@ descriptionTextAreaElement.addEventListener('input', () => {
   imageUploadSubmitButton.disabled = !pristine.validate();
 });
 
+
 setScaleControlValue(IMAGE_SIZE_INIT);
+imageUploadSubmitButton.disabled = true;
