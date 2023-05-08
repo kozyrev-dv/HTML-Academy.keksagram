@@ -24,6 +24,8 @@ const UPLOAD_SUBMIT_BUTTON_TEXT = imageUploadSubmitButton.textContent;
 
 let imageScaleValue = IMAGE_SIZE_INIT;
 let isPreviewContainerHidden = true;
+let isMessageElementHidden = true;
+
 
 //----- setting Prestine validation
 
@@ -32,6 +34,7 @@ const pristine = new Pristine(imageUploadForm, {
   errorTextParent: 'image-description__field-label'
 });
 
+//----- close section
 
 const setScaleControlValue = (value) => {
   imageScaleValue = imageScaleValue = Math.min(IMAGE_SIZE_MAX, Math.max(IMAGE_SIZE_MIN, value));
@@ -40,46 +43,70 @@ const setScaleControlValue = (value) => {
 };
 
 const showImagePreviewContainer = () => {
-  if (isPreviewContainerHidden) {
-    isPreviewContainerHidden = false;
+  setScaleControlValue(IMAGE_SIZE_INIT);
+  imageUploadSubmitButton.disabled = true;
 
-    document.body.classList.add(MODAL_OPEN_CSS_CLASS);
-    imageUploadContainer.classList.remove(HIDDEN_CSS_CLASS);
-  }
+  document.body.classList.add(MODAL_OPEN_CSS_CLASS);
+  imageUploadContainer.classList.remove(HIDDEN_CSS_CLASS);
+  isPreviewContainerHidden = false;
+};
+
+const resetFields = () => {
+  fileSelectInputElement.value = '';
+  descriptionTextAreaElement.value = '';
+  hashtagTextElement.value = '';
+  effectNoneRadioButton.checked = true;
+  imageUploadPreviewElement.children[0].classList = '';
+  setScaleControlValue(IMAGE_SIZE_INIT);
 };
 
 const hideImagePreviewContainer = () => {
-  if (!isPreviewContainerHidden) {
-    imageUploadContainer.classList.add(HIDDEN_CSS_CLASS);
-    document.body.classList.remove(MODAL_OPEN_CSS_CLASS);
-
-    isPreviewContainerHidden = true;
-    fileSelectInputElement.value = '';
-    descriptionTextAreaElement.value = '';
-    hashtagTextElement.value = '';
-    effectNoneRadioButton.checked = true;
-    imageUploadPreviewElement.children[0].classList = '';
-    setScaleControlValue(IMAGE_SIZE_INIT);
-  }
+  imageUploadContainer.classList.add(HIDDEN_CSS_CLASS);
+  document.body.classList.remove(MODAL_OPEN_CSS_CLASS);
+  isPreviewContainerHidden = true;
 };
 
-
-fileSelectInputElement.addEventListener('input', showImagePreviewContainer);
-uploadCancelButton.addEventListener('click', hideImagePreviewContainer);
-document.addEventListener('keydown', (evt) => {
-  if (!isPreviewContainerHidden && (evt.key === 'Esc' || evt.key === 'Escape')) {
-    hideImagePreviewContainer();
+//----- setting success and error message blocks
+const successMessageElement = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+successMessageElement.style.zIndex = '5';
+successMessageElement.querySelector('.success__button').addEventListener('click', () => {
+  successMessageElement.parentNode.removeChild(successMessageElement);
+});
+successMessageElement.addEventListener('click', (evt) => {
+  if (evt.target === successMessageElement) {
+    hideMessageElement(successMessageElement);
   }
 });
 
-document.querySelector('.scale__control--smaller').addEventListener('click', () => {
-  setScaleControlValue(imageScaleValue - IMAGE_RESIZE_STEP);
+
+const errorMessageElement = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+errorMessageElement.style.zIndex = '5';
+errorMessageElement.querySelector('.error__button').addEventListener('click', () => {
+  errorMessageElement.parentNode.removeChild(errorMessageElement);
+  const imageScale = imageScaleValue;
+  showImagePreviewContainer();
+  imageUploadSubmitButton.disabled = !pristine.validate();
+  setScaleControlValue(imageScale);
+});
+errorMessageElement.addEventListener('click', (evt) => {
+  if (evt.target === errorMessageElement) {
+    hideMessageElement(errorMessageElement);
+    hideImagePreviewContainer();
+    resetFields();
+  }
 });
 
-document.querySelector('.scale__control--bigger').addEventListener('click', () => {
-  setScaleControlValue(imageScaleValue + IMAGE_RESIZE_STEP);
-});
+//----- close section
 
+const showMessageElement = (messageElement) => {
+  document.body.appendChild(messageElement);
+  isMessageElementHidden = false;
+};
+
+const hideMessageElement = (messageElement) => {
+  messageElement.parentNode.removeChild(messageElement);
+  isMessageElementHidden = true;
+};
 
 const blockUploadSubmitButtonLoad = () => {
   imageUploadSubmitButton.disabled = true;
@@ -91,12 +118,6 @@ const unblockUploadSubmitButtonLoad = () => {
   imageUploadSubmitButton.textContent = UPLOAD_SUBMIT_BUTTON_TEXT;
 };
 
-const showError = () => {
-
-  console.error('ERROR');
-
-};
-
 imageUploadSubmitButton.addEventListener('click', (evt) => {
   evt.preventDefault();
 
@@ -105,10 +126,14 @@ imageUploadSubmitButton.addEventListener('click', (evt) => {
     () => {
       unblockUploadSubmitButtonLoad();
       hideImagePreviewContainer();
+      resetFields();
+      showMessageElement(successMessageElement);
     },
     () => {
       unblockUploadSubmitButtonLoad();
-      showError();
+      imageUploadContainer.classList.add(HIDDEN_CSS_CLASS);
+      document.body.classList.remove(MODAL_OPEN_CSS_CLASS);
+      showMessageElement(errorMessageElement);
     }, new FormData(imageUploadForm));
 
 });
@@ -117,6 +142,36 @@ descriptionTextAreaElement.addEventListener('input', () => {
   imageUploadSubmitButton.disabled = !pristine.validate();
 });
 
+fileSelectInputElement.addEventListener('input', showImagePreviewContainer);
+uploadCancelButton.addEventListener('click', () => {
+  hideImagePreviewContainer();
+  resetFields();
+});
 
-setScaleControlValue(IMAGE_SIZE_INIT);
-imageUploadSubmitButton.disabled = true;
+const hideMessageElementEventHandler = () => {
+  if (!isMessageElementHidden) {
+    if (successMessageElement.parentNode !== null) {
+      hideMessageElement(successMessageElement);
+    } else {
+      hideMessageElement(errorMessageElement);
+    }
+  }
+};
+
+document.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Esc' || evt.key === 'Escape') {
+    if (!isPreviewContainerHidden) {
+      hideImagePreviewContainer();
+      resetFields();
+    }
+    hideMessageElementEventHandler();
+  }
+});
+
+document.querySelector('.scale__control--smaller').addEventListener('click', () => {
+  setScaleControlValue(imageScaleValue - IMAGE_RESIZE_STEP);
+});
+
+document.querySelector('.scale__control--bigger').addEventListener('click', () => {
+  setScaleControlValue(imageScaleValue + IMAGE_RESIZE_STEP);
+});
