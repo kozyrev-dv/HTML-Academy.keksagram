@@ -53,7 +53,7 @@
 
                   <!-- Предварительный просмотр изображения -->
                   <div class="img-upload__preview">
-                    <img src="img/upload-default-image.jpg" alt="Предварительный просмотр фотографии">
+                    <img class="effects__preview--none" src="img/upload-default-image.jpg" alt="Предварительный просмотр фотографии">
                   </div>
 
                   <!-- Изменение глубины эффекта, накладываемого на изображение -->
@@ -219,7 +219,17 @@
     <section class="error">
       <div class="error__inner">
         <h2 class="error__title">Ошибка загрузки файла</h2>
-        <button type="button" class="error__button">Загрузить другой файл</button>
+        <button type="button" class="error__button">Попробовать еще раз</button>
+      </div>
+    </section>
+  </template>
+
+  <template id="error-posts">
+    <section class="error">
+      <div class="error__inner">
+        <h2 class="error__title">Ошибка получения данных с сервера</h2>
+        <p>Повторите попытку позже</p>
+        <button type="button" class="error__button">Попробовать еще раз</button>
       </div>
     </section>
   </template>
@@ -240,7 +250,8 @@
   </template>
 
   <script src="pristine/pristine.min.js"  type="text/javascript"></script>
-  <script src="js/image-upload-form.js" type="module"></script>
+  <script src="js/image-upload-form-init.js" type="module"></script>
+  <script src="js/image-upload-form-effects.js" type="module"></script>
   <script src="js/data.js" type="module"></script>
   <script src="js/utils.js" type="module"></script>
   <script src="js/render.js" type="module"></script>

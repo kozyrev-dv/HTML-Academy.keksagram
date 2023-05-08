@@ -1,10 +1,14 @@
 import { generatePhotoElements } from './render.js';
-import { checkLength } from './utils.js';
+import { getData } from './api.js';
+import { MODAL_OPEN_CSS_CLASS } from './utils.js';
 
-const PHOTO_AMOUNT = 25;
-const DESCRIPTIONS = Array.from({length: PHOTO_AMOUNT}, (v, index) => `the ${index + 1} photo`);
-const PHOTO_URLS = Array.from({length: PHOTO_AMOUNT}, (V, index) => `photos/${index + 1}.jpg`);
+const errorLoadPostsMessageElement = document.querySelector('#error-posts').content.querySelector('.error').cloneNode(true);
+errorLoadPostsMessageElement.querySelector('.error__button').onclick =  () => {
+  document.location.reload();
+  return false;
+};
 
-generatePhotoElements(PHOTO_AMOUNT, PHOTO_URLS, DESCRIPTIONS);
-
-checkLength('Hello World!', 12);
+getData('https://27.javascript.pages.academy/kekstagram-simple/data', generatePhotoElements, () => {
+  document.body.classList.add(MODAL_OPEN_CSS_CLASS);
+  document.body.appendChild(errorLoadPostsMessageElement);
+});
