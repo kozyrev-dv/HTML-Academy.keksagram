@@ -1,7 +1,6 @@
 import { sendData } from './api.js';
 
-const HIDDEN_CSS_CLASS = 'hidden';
-const MODAL_OPEN_CSS_CLASS = 'modal-open';
+import { MODAL_OPEN_CSS_CLASS, HIDDEN_CSS_CLASS } from './utils.js';
 
 const IMAGE_SIZE_MAX = 100;
 const IMAGE_SIZE_MIN = 25;

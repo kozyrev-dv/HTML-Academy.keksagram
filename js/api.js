@@ -1,9 +1,10 @@
-const getData = (onSuccess) => {
-  fetch('https://27.javascript.pages.academy/kekstagram-simple/data')
+const getData = (address, onSuccess, onFail) => {
+  fetch(address)
     .then((response) => response.json())
-    .then((wizards) => {
-      onSuccess(wizards);
-    });
+    .then((data) => {
+      onSuccess(data);
+    })
+    .catch(onFail);
 };
 
 const sendData = (onSuccess, onFail, body) => {

@@ -1,10 +1,4 @@
-function randInt(a, b) {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+const HIDDEN_CSS_CLASS = 'hidden';
+const MODAL_OPEN_CSS_CLASS = 'modal-open';
 
-  return Math.floor(Math.random() * (upper - lower + 1) + lower);
-}
-
-const checkLength = (message, maxLength) => String(message).length <= maxLength;
-
-export {randInt, checkLength};
+export {HIDDEN_CSS_CLASS, MODAL_OPEN_CSS_CLASS};
