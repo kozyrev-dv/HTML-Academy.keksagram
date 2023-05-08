@@ -1,5 +1,5 @@
 const getData = (onSuccess) => {
-  fetch('https://26.javascript.pages.academy/code-and-magick/data')
+  fetch('https://27.javascript.pages.academy/kekstagram-simple/data')
     .then((response) => response.json())
     .then((wizards) => {
       onSuccess(wizards);
@@ -8,7 +8,7 @@ const getData = (onSuccess) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://26.javascript.pages.academy/code-and-magick',
+    'https://27.javascript.pages.academy/kekstagram-simple',
     {
       method: 'POST',
       body,

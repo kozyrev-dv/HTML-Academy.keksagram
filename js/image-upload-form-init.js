@@ -1,3 +1,5 @@
+import { sendData } from './api.js';
+
 const HIDDEN_CSS_CLASS = 'hidden';
 const MODAL_OPEN_CSS_CLASS = 'modal-open';
 
@@ -6,15 +8,19 @@ const IMAGE_SIZE_MIN = 25;
 const IMAGE_SIZE_INIT = 100;
 const IMAGE_RESIZE_STEP = 25;
 
-const imageUploadForm = document.querySelector('#upload-select-image');
-const fileSelectInputElement = document.querySelector('#upload-file');
 const imageUploadContainer = document.querySelector('.img-upload__overlay');
-const uploadCancelButton = document.querySelector('#upload-cancel');
-const imageUploadSubmitButton = document.querySelector('#upload-submit');
 const imageUploadPreviewElement = document.querySelector('.img-upload__preview');
-const descriptionTextAreaElement = document.querySelector('.text__description');
-
 const scaleControlValueElement = document.querySelector('.scale__control--value');
+const uploadCancelButton = document.querySelector('#upload-cancel');
+
+const descriptionTextAreaElement = document.querySelector('.text__description');
+const effectNoneRadioButton = document.querySelector('#effect-none');
+const fileSelectInputElement = document.querySelector('#upload-file');
+const hashtagTextElement = document.querySelector('.text__hashtags');
+const imageUploadForm = document.querySelector('#upload-select-image');
+const imageUploadSubmitButton = document.querySelector('#upload-submit');
+
+const UPLOAD_SUBMIT_BUTTON_TEXT = imageUploadSubmitButton.textContent;
 
 let imageScaleValue = IMAGE_SIZE_INIT;
 let isPreviewContainerHidden = true;
@@ -35,7 +41,6 @@ const setScaleControlValue = (value) => {
 
 const showImagePreviewContainer = () => {
   if (isPreviewContainerHidden) {
-    setScaleControlValue(IMAGE_SIZE_INIT);
     isPreviewContainerHidden = false;
 
     document.body.classList.add(MODAL_OPEN_CSS_CLASS);
@@ -50,6 +55,11 @@ const hideImagePreviewContainer = () => {
 
     isPreviewContainerHidden = true;
     fileSelectInputElement.value = '';
+    descriptionTextAreaElement.value = '';
+    hashtagTextElement.value = '';
+    effectNoneRadioButton.checked = true;
+    imageUploadPreviewElement.children[0].classList = '';
+    setScaleControlValue(IMAGE_SIZE_INIT);
   }
 };
 
@@ -70,7 +80,38 @@ document.querySelector('.scale__control--bigger').addEventListener('click', () =
   setScaleControlValue(imageScaleValue + IMAGE_RESIZE_STEP);
 });
 
-imageUploadSubmitButton.addEventListener('submit', hideImagePreviewContainer);
+
+const blockUploadSubmitButtonLoad = () => {
+  imageUploadSubmitButton.disabled = true;
+  imageUploadSubmitButton.textContent = 'Отправка...';
+};
+
+const unblockUploadSubmitButtonLoad = () => {
+  imageUploadSubmitButton.disabled = !pristine.validate();
+  imageUploadSubmitButton.textContent = UPLOAD_SUBMIT_BUTTON_TEXT;
+};
+
+const showError = () => {
+
+  console.error('ERROR');
+
+};
+
+imageUploadSubmitButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+
+  blockUploadSubmitButtonLoad();
+  sendData(
+    () => {
+      unblockUploadSubmitButtonLoad();
+      hideImagePreviewContainer();
+    },
+    () => {
+      unblockUploadSubmitButtonLoad();
+      showError();
+    }, new FormData(imageUploadForm));
+
+});
 
 descriptionTextAreaElement.addEventListener('input', () => {
   imageUploadSubmitButton.disabled = !pristine.validate();
