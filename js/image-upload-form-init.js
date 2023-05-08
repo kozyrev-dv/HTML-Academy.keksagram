@@ -1,5 +1,4 @@
 import { sendData } from './api.js';
-
 import { MODAL_OPEN_CSS_CLASS, HIDDEN_CSS_CLASS } from './utils.js';
 
 const IMAGE_SIZE_MAX = 100;
@@ -34,6 +33,16 @@ const pristine = new Pristine(imageUploadForm, {
 });
 
 //----- close section
+
+const showMessageElement = (messageElement) => {
+  document.body.appendChild(messageElement);
+  isMessageElementHidden = false;
+};
+
+const hideMessageElement = (messageElement) => {
+  messageElement.parentNode.removeChild(messageElement);
+  isMessageElementHidden = true;
+};
 
 const setScaleControlValue = (value) => {
   imageScaleValue = imageScaleValue = Math.min(IMAGE_SIZE_MAX, Math.max(IMAGE_SIZE_MIN, value));
@@ -96,16 +105,6 @@ errorMessageElement.addEventListener('click', (evt) => {
 });
 
 //----- close section
-
-const showMessageElement = (messageElement) => {
-  document.body.appendChild(messageElement);
-  isMessageElementHidden = false;
-};
-
-const hideMessageElement = (messageElement) => {
-  messageElement.parentNode.removeChild(messageElement);
-  isMessageElementHidden = true;
-};
 
 const blockUploadSubmitButtonLoad = () => {
   imageUploadSubmitButton.disabled = true;
