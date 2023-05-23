@@ -1,4 +1,5 @@
 import { sendData } from './api.js';
+import { resetEffects } from './image-upload-form-effects.js';
 import { MODAL_OPEN_CSS_CLASS, HIDDEN_CSS_CLASS } from './utils.js';
 
 const IMAGE_SIZE_MAX = 100;
@@ -12,7 +13,6 @@ const scaleControlValueElement = document.querySelector('.scale__control--value'
 const uploadCancelButton = document.querySelector('#upload-cancel');
 
 const descriptionTextAreaElement = document.querySelector('.text__description');
-const effectNoneRadioButton = document.querySelector('#effect-none');
 const fileSelectInputElement = document.querySelector('#upload-file');
 const hashtagTextElement = document.querySelector('.text__hashtags');
 const imageUploadForm = document.querySelector('#upload-select-image');
@@ -63,8 +63,7 @@ const resetFields = () => {
   fileSelectInputElement.value = '';
   descriptionTextAreaElement.value = '';
   hashtagTextElement.value = '';
-  effectNoneRadioButton.checked = true;
-  imageUploadPreviewElement.children[0].classList = '';
+  resetEffects();
   setScaleControlValue(IMAGE_SIZE_INIT);
 };
 
