@@ -81,8 +81,7 @@ noUiSlider.create(effectLevelSliderElement, {
     'min': 0,
     'max': 1.0
   },
-  start: 1,
-  tooltips: true
+  start: 1
 });
 
 effectLevelSliderElement.noUiSlider.on('update', (value) => {
